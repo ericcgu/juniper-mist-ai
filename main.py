@@ -1,6 +1,9 @@
 from fastapi import FastAPI
 
-app = FastAPI()
+app = FastAPI(
+    title="Juniper Mist ",
+    version="1.0.0"
+)
 
 @app.get("/")
 async def root():
