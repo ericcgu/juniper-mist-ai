@@ -1,18 +1,7 @@
----
-title: Juniper Mist Multi Site Provisioning Service
-summary: A professional-grade project for automating and managing Juniper Mist networks using Python 3.12.
-tags:
-  - python
-  - mist
-  - network-automation
-  - juniper
----
+[![CI Status](https://github.com/ericcgu/juniper-mist-ai/actions/workflows/ci.yml/badge.svg)](https://github.com/ericcgu/juniper-mist-ai/actions)
+[![Python 3.12](https://img.shields.io/badge/python-3.12-blue.svg)](https://www.python.org/downloads/release/python-312/)
 
 # Juniper Mist Multi Site Provisioning Service
-
-[![CI Status](https://github.com/ericcgu/juniper-mist-ai/actions/workflows/ci.yml/badge.svg)](https://github.com/ericcgu/juniper-mist-ai/actions)
-
-[![Python 3.12](https://img.shields.io/badge/python-3.12-blue.svg)](https://www.python.org/downloads/release/python-312/)
 
 ## 🌐 Live Demo
 
