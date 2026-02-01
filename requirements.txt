@@ -1,4 +1,5 @@
 fastapi==0.115.0
+fnc==0.5.3
 httpx==0.28.1
 hypercorn==0.14.4
 mistapi==0.55.8

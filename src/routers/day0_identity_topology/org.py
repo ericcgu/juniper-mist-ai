@@ -11,6 +11,7 @@ from fastapi import APIRouter
 from pydantic import BaseModel, Field
 
 from src.services.mist_engine import MistEngine
+from src.services.redis import get_redis_client
 
 
 router = APIRouter(prefix="/org", tags=["Day 0 - Org"])
@@ -45,4 +46,10 @@ async def get_self(
     This is useful for verifying API credentials and retrieving org_id.
     """
     engine = MistEngine(host=request.api_host)
-    return await engine.get_self()
+    result = await engine.get_self()
+    
+    # Save the api_host to Redis
+    redis_client = get_redis_client()
+    redis_client.set("api_host", request.api_host)
+    
+    return result

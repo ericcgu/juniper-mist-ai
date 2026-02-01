@@ -5,8 +5,10 @@ export PYTHONWARNINGS := ignore
 # Virtual environment paths
 VENV := .venv
 ifeq ($(OS),Windows_NT)
-	PYTHON := $(VENV)/Scripts/python.exe
-	PIP := $(VENV)/Scripts/pip.exe
+	PYTHON := $(VENV)\Scripts\python.exe
+	PIP := $(VENV)\Scripts\pip.exe
+	SHELL := powershell.exe
+	.SHELLFLAGS := -NoProfile -Command
 else
 	PYTHON := $(VENV)/bin/python
 	PIP := $(VENV)/bin/pip
@@ -25,7 +27,7 @@ install: venv
 
 # Run tests then start server
 run:
-	$(PYTHON) -m pytest tests/ && $(PYTHON) -m hypercorn src.main:app --reload
+	$(PYTHON) -m pytest tests/; if ($$LASTEXITCODE -eq 0) { $(PYTHON) -m hypercorn src.main:app --reload }
 
 # Run tests only
 test:

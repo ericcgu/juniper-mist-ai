@@ -1,8 +1,13 @@
 from fastapi.testclient import TestClient
 from src.main import app
 
-def test_status():
-    client = TestClient(app)
-    response = client.get("/status")
-    assert response.status_code == 200
-    assert response.json() == {"status": "ok"}
+
+class TestMain:
+    """Test main application endpoints."""
+
+    def test_status(self):
+        """Test that status endpoint returns ok."""
+        client = TestClient(app)
+        response = client.get("/status")
+        assert response.status_code == 200
+        assert response.json() == {"status": "ok"}

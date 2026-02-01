@@ -1,6 +1,7 @@
 from fastapi import FastAPI, APIRouter, Depends
 from fastapi.responses import RedirectResponse
 from src.config import Settings, get_settings
+from src.routers.day0_identity_topology import org, context
 
 app = FastAPI(
     title="Juniper Mist - Multi Site Provisioning Service API",
@@ -18,6 +19,8 @@ async def get_test_variable(settings: Settings = Depends(get_settings)):
     return {"test_variable": settings.test_variable}
 
 app.include_router(status_router)
+app.include_router(org.router)
+app.include_router(context.router)
 
 @app.get("/", include_in_schema=False)
 def redirect_to_docs():
