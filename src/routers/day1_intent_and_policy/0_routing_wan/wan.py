@@ -5,7 +5,7 @@ Handles applications, hub profiles, and gateway templates.
 from fastapi import APIRouter, Security
 from fastapi.security import APIKeyHeader
 
-from src.routers.day1_intent_and_policy.models import ApplicationCreate, HubProfileCreate, GatewayTemplateCreate
+from .models import ApplicationCreate, HubProfileCreate, GatewayTemplateCreate
 
 router = APIRouter(prefix="/wan", tags=["WAN - Day 1"])
 

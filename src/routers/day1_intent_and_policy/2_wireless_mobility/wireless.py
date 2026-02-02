@@ -8,13 +8,13 @@ for the organization.
 from fastapi import APIRouter, Security
 from fastapi.security import APIKeyHeader
 
-from src.routers.day1_intent_and_policy.models import (
+from .models import (
     RFTemplateCreate,
     WLANTemplateCreate,
     WLANCreate,
     LabelCreate,
     WxRuleCreate,
-    OrgPSKCreate
+    OrgPSKCreate,
 )
 
 router = APIRouter(prefix="/wireless", tags=["Wireless - Day 1"])

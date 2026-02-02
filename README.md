@@ -17,7 +17,7 @@
 
 **`eg-mist-orchestration-core`** is a masterclass in Domain-Driven Design & Intent-Based Networking for the AI-Driven Enterprise.
 
-This project demonstrates the evolution of network infrastructure from fragile, device-by-device configuration to robust, **AI-Native Software Engineering**. It eliminates "snowflake" configurations by implementing a strictly **idempotent**, **service-based** architecture that orchestrates the full lifecycle—from **Day 0 Design, Identity & Topology** to **Day 2 Observability, Assurance & AIOps**.
+This project demonstrates the evolution of network infrastructure from fragile, device-by-device configuration to robust, **AI-Native Software Engineering**. It eliminates "snowflake" configurations by implementing a strictly **idempotent**, **service-based** architecture that orchestrates the full lifecycle—from **Day 0 Network Design & Topology** to **Day 2 Observability, Assurance & AIOps**.
 
 By treating the network as a distributed software system, this framework bridges the gap between **Network Design** (The "What") and **Software Architecture** (The "How").
 
@@ -27,11 +27,11 @@ By treating the network as a distributed software system, this framework bridges
 
 This core orchestrator is organized into three distinct domains, mirroring the modern Infrastructure-as-Code (IaC) lifecycle.
 
-### Day 0: Design, Identity & Topology
+### Day 0: Network Design & Topology
 
-Before policies or assurance can exist, we must establish the **Identity** of the Organization and the **Topology** of the network. We use "Digital Twin" principles to build the network virtually before hardware arrives.
+Before policies or assurance can exist, we establish the network's foundational design and topology. Using "Digital Twin" principles, the network is built virtually before hardware arrives.
 
-The Genesis Layer defines six distinct, isolated domains implemented as separate service:
+Day 0 defines six distinct, isolated domains:
 
 **1. Mist Connection Service**
 - **Role:** Connectivity & Authentication
@@ -60,13 +60,48 @@ The Genesis Layer defines six distinct, isolated domains implemented as separate
 
 ### Day 1: Intent & Policy
 
-The Intent Layer implements Intent-Based Networking (IBN) by separating the **"What"** (Templates/Intent) from the **"Where"** (Sites/Instances). This "Late Binding" workflow ensures the network state always converges to the business requirement.
+Once the topology is established, Day 1 applies business rules to the infrastructure. We follow the packet path—**Router → Switch → AP**—to define Service Domains that govern behavior.
 
-**Key Principles:**
+#### The Architectural Strategy: "From Edge to User"
+We do not configure devices; we configure **Service Domains**. We define Intent in the same order a packet traverses the network to ensure dependency resolution (e.g., You cannot have Wi-Fi without a switch port, and you cannot have Internet without a router).
 
-- **Templates as Classes:** Define a "Gold Standard" (e.g., *Retail Switch Template*) once. All 1,000 sites inherit this class
-- **Site Variables:** No hardcoded VLANs. Uses Mist Variables (e.g., `{{guest_vlan}}`). The Orchestrator injects unique values into the Site Shell during Day 0, while Day 1 Templates reference the abstract variable
-- **Late Binding:** Configurations are not hard-coded to devices. Templates map to Site Groups, allowing entire region policy changes by updating a single UUID reference
+> **The "Abstract" Rule (Golden Rule):**
+> Day 1 configurations must **never** contain static integers (e.g., "VLAN 10"). They must strictly use Jinja-style Variables (e.g., `{{user_vlan}}`) defined in Day 0. This ensures the "Class" (Template) remains reusable across 10,000 unique "Instances" (Sites).
+
+#### Service Domain Mapping
+
+| Folder | Medium | Discipline | Purpose |
+|--------|--------|------------|---------|
+| `0_routing_wan` | WAN | Routing | Edge transport |
+| `1_wired_switching` | Wired | Switching | Physical connectivity |
+| `2_wireless_mobility` | Wireless | Mobility | Roaming experience |
+
+---
+
+#### 1. WAN Domain Service - Routing
+* **Physical Hardware:** Juniper SSR / SRX Gateways.
+* **Role:** The "Routing & Security Class" (WAN Edge Templates & AppQoE).
+* **The Strategy:**
+    * **Traffic Steering:** Consumes the **Applications Service** (Day 0) to build "Traffic Lanes" (e.g., *"Zoom traffic takes the Express Lane (MPLS), YouTube takes the Local Lane (Broadband)"*).
+    * **Breakout Policies:** Defines Local Internet Breakout rules globally, ensuring security compliance at the edge.
+* **The Win:** "Zoom is slow" is no longer a routing problem; it is a policy object. You simply drag the `Zoom` app signature into the `High-Priority` bucket in the WAN Template.
+
+#### 2. Wired Domain Service - Switching
+* **Physical Hardware:** Juniper EX Series Switches.
+* **Role:** The "Aggregation & Access Class" (Switch Templates).
+* **The Strategy:**
+    * **Colorless Ports:** We define abstract **Port Profiles** (e.g., `profile-ap`, `profile-camera`, `profile-corp-user`) rather than configuring "Port 4."
+    * **Dynamic Binding:** When an AP is plugged into Port 4, LLDP detects it and automatically applies the `profile-ap`.
+    * **Variable Mapping:** The profile does not say "VLAN 10." It says `vlan_id = {{mgmt_vlan}}`. The specific integer is injected by the Day 0 Site Context.
+* **The Win:** Eliminates the need to manually configure ports. A switch port detects an AP and automatically applies the correct profile and VLANs without human intervention.
+
+#### 3. Wireless Domain Service - Mobility
+* **Physical Hardware:** Juniper Mist Access Points.
+* **Role:** The "Mobility & RF Class" (RF Profiles & WLAN Templates).
+* **The Strategy:**
+    * **RF Abstraction:** We create strict physics profiles (e.g., `High-Density-Auditorium` vs. `Low-Density-Warehouse`) to standardize Radio Resource Management (RRM).
+    * **SSID Abstraction:** The SSID name might be static ("Corp-Wifi"), but the backend authentication (Radius Servers) is a variable (`{{radius_ip}}`).
+* **The Win:** Decouples the "Wi-Fi Experience" from physical site geometry. This allows you to rotate a RADIUS Secret Key across 5,000 sites instantly by updating a single JSON field in the global Template.
 
 ### Day 2: Operations & Lifecycle
 

@@ -5,7 +5,7 @@ Handles VLANs, networks, and switch template configuration.
 from fastapi import APIRouter, Security
 from fastapi.security import APIKeyHeader
 
-from src.routers.day1_intent_and_policy.models import NetworkCreate, SwitchTemplateCreate
+from .models import NetworkCreate, SwitchTemplateCreate
 
 router = APIRouter(prefix="/wired", tags=["Wired - Day 1"])
 
