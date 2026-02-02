@@ -4,10 +4,11 @@ Handles device assignment and claim operations.
 """
 from fastapi import APIRouter, Security
 from fastapi.security import APIKeyHeader
-
-from src.routers.day0_design_and_topology.models import DeviceAssignment, ClaimDevice
+from pydantic import BaseModel, Field
 
 router = APIRouter(prefix="/inventory", tags=["Inventory - Day 0"])
+
+mist_api_key = APIKeyHeader(name="X-Mist-API-Key", description="Your Juniper Mist API token")
 
 # =============================================================================
 # Inventory Models

@@ -53,6 +53,7 @@ This is a **Juniper Mist Multi-Site Provisioning Service API** built with FastAP
 - Always use **uv** for package installation (`uv pip install`)
 - Use Pydantic v2 syntax for models and settings
 - Get settings from environment via `get_settings()` from `src.config`
+- Never export routers in `__init__.py` files
 
 ### Pydantic Models
 - Use `model_config = SettingsConfigDict(...)` (not `class Config`)
