@@ -1,7 +1,7 @@
 from fastapi import FastAPI, APIRouter, Depends
 from fastapi.responses import RedirectResponse
 from src.config import Settings, get_settings
-from src.routers.day0_identity_and_topology import org, nms, sites
+from src.routers.day0_design_and_topology import org, nms, sites
 
 # OpenAPI tag definitions for Swagger UI grouping.
 tags_metadata = [

@@ -15,7 +15,7 @@ from fastapi.testclient import TestClient
 from src.main import app
 
 
-class TestNmsProfile:
+class TestNMSProfile:
     """
     Test the /nms endpoints.
     
@@ -37,7 +37,7 @@ class TestNmsProfile:
         Why: Tests should never hit real infrastructure. Mocking Redis
         ensures tests are fast, repeatable, and don't require Redis running.
         """
-        with patch("src.routers.day0_identity_and_topology.nms.get_redis_client") as mock:
+        with patch("src.routers.day0_design_and_topology.nms.get_redis_client") as mock:
             redis_mock = MagicMock()
             mock.return_value = redis_mock
             yield redis_mock
